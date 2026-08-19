@@ -20,8 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Eventos na lista (Delegation)
     taskList.addEventListener('click', (e) => {
-        const id = parseInt(e.target.closest('li').dataset.id);
-        
+        // Cliques fora de uma tarefa (o espaco entre itens) nao resolvem para
+        // um <li> e antes quebravam o handler ao ler .dataset de null.
+        const item = e.target.closest('li');
+        if (!item) return;
+
+        const id = parseInt(item.dataset.id);
+
         if (e.target.classList.contains('toggle-btn')) {
             TaskManager.toggleTask(id);
         } else if (e.target.classList.contains('delete-btn')) {
