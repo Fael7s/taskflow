@@ -7,14 +7,24 @@ document.addEventListener('DOMContentLoaded', () => {
     TaskManager.tasks = Storage.load();
     UI.updateList(TaskManager.tasks, taskList);
     
-    // Adicionar tarefa
-    addBtn.addEventListener('click', () => {
+    // Uma unica funcao para o botao e para a tecla Enter.
+    function addTaskFromInput() {
         const name = taskInput.value.trim();
-        if (name) {
-            TaskManager.addTask(name);
-            Storage.save(TaskManager.tasks);
-            UI.updateList(TaskManager.tasks, taskList);
-            taskInput.value = '';
+        if (!name) return;
+
+        TaskManager.addTask(name);
+        taskInput.value = '';
+        Storage.save(TaskManager.tasks);
+        UI.updateList(TaskManager.tasks, taskList);
+    }
+
+    // Adicionar tarefa
+    addBtn.addEventListener('click', addTaskFromInput);
+
+    taskInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTaskFromInput();
         }
     });
     
