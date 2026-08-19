@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = e.target.closest('li');
         if (!item) return;
 
-        const id = parseInt(item.dataset.id);
+        const id = item.dataset.id;
 
         if (e.target.classList.contains('toggle-btn')) {
             TaskManager.toggleTask(id);
