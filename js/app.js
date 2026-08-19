@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         UI.updateList(TaskManager.tasks, taskList);
     }
 
-    // Uma unica funcao para o botao e para a tecla Enter.
+    // Uma única função para o botão e para a tecla Enter.
     function addTaskFromInput() {
         const name = taskInput.value.trim();
         if (!name) return;
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Eventos na lista (Delegation)
     taskList.addEventListener('click', (e) => {
-        // Cliques fora de uma tarefa (o espaco entre itens) nao resolvem para
+        // Cliques fora de uma tarefa (o espaço entre itens) não resolvem para
         // um <li> e antes quebravam o handler ao ler .dataset de null.
         const item = e.target.closest('li');
         if (!item) return;
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.target.classList.contains('delete-btn')) {
             TaskManager.removeTask(id);
         } else {
-            // Clique que nao altera estado: nada a salvar nem a redesenhar.
+            // Clique que não altera estado: nada a salvar nem a redesenhar.
             return;
         }
 
