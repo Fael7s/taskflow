@@ -63,6 +63,13 @@ button:hover {
     background: #e68a00;
 }
 
+.status-message {
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin: 0 0 10px;
+    min-height: 1.2em;
+}
+
 ul {
     list-style: none;
     padding: 0;
