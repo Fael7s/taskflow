@@ -33,5 +33,9 @@ const UI = {
         tasks.forEach(task => {
             container.appendChild(this.renderTask(task));
         });
+    },
+
+    showStatus(container, message) {
+        container.textContent = message;
     }
 };

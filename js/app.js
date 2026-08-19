@@ -2,11 +2,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
     const taskInput = document.getElementById('task-name');
     const addBtn = document.getElementById('add-task');
-    
+    const statusEl = document.getElementById('status-message');
+
     // Inicializar dados
     TaskManager.tasks = Storage.load();
+    if (Storage.lastError) {
+        UI.showStatus(statusEl, 'N\u00e3o foi poss\u00edvel ler as tarefas salvas. A lista come\u00e7ou vazia.');
+    }
     UI.updateList(TaskManager.tasks, taskList);
-    
+
+    // Persiste e redesenha. Quando a escrita falha (quota estourada, storage
+    // desabilitado), a mensagem avisa em vez de a UI parecer salva.
+    function persistAndRender() {
+        const saved = Storage.save(TaskManager.tasks);
+        UI.showStatus(
+            statusEl,
+            saved ? '' : 'N\u00e3o foi poss\u00edvel salvar. As altera\u00e7\u00f5es podem ser perdidas ao recarregar.'
+        );
+        UI.updateList(TaskManager.tasks, taskList);
+    }
+
     // Uma unica funcao para o botao e para a tecla Enter.
     function addTaskFromInput() {
         const name = taskInput.value.trim();
@@ -14,8 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         TaskManager.addTask(name);
         taskInput.value = '';
-        Storage.save(TaskManager.tasks);
-        UI.updateList(TaskManager.tasks, taskList);
+        persistAndRender();
     }
 
     // Adicionar tarefa
@@ -27,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addTaskFromInput();
         }
     });
-    
+
     // Eventos na lista (Delegation)
     taskList.addEventListener('click', (e) => {
         // Cliques fora de uma tarefa (o espaco entre itens) nao resolvem para
@@ -41,9 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
             TaskManager.toggleTask(id);
         } else if (e.target.classList.contains('delete-btn')) {
             TaskManager.removeTask(id);
+        } else {
+            // Clique que nao altera estado: nada a salvar nem a redesenhar.
+            return;
         }
-        
-        Storage.save(TaskManager.tasks);
-        UI.updateList(TaskManager.tasks, taskList);
+
+        persistAndRender();
     });
 });
